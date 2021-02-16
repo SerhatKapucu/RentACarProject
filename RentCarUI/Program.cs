@@ -10,16 +10,18 @@ namespace CarApp
     {
         static void Main(string[] args)
         {
-            BrandManager brandManager = new BrandManager(new EfBrandDal());
-            //brandManager.Add(new Brand() { BrandName = "Citroen C4" });
-
             BrandList();
-
-            ColorManager colorManager = new ColorManager(new EfColorDal());
-            //colorManager.Add(new Color() { ColorName = "Beyaz" });
-
+            
             ColorList();
 
+            CarDetailList();
+
+            RentalList();
+
+        }
+
+        private static void CarDetailList()
+        {
             CarManager carManager = new CarManager(new EfCarDal());
             var result = carManager.GetCarDetails();
             if (result.Success)
@@ -35,10 +37,23 @@ namespace CarApp
             {
                 Console.WriteLine(result.Message);
             }
+        }
 
+        private static void RentalList()
+        {
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            var result = rentalManager.GetAll();
 
+            if (result.Success)
+            {
+                foreach (var rental in result.Data)
+                {
+                    Console.WriteLine(rental.CarId);
+                }
+            }
 
         }
+
         private static void BrandList()
         {
             BrandManager brandManager = new BrandManager(new EfBrandDal());
