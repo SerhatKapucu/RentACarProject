@@ -1,6 +1,5 @@
 ﻿using Business.Concrete;
 using DataAccess.Concrete.EntityFramework;
-using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using System;
 
@@ -10,28 +9,39 @@ namespace CarApp
     {
         static void Main(string[] args)
         {
-            BrandList();
-            
-            ColorList();
+            BrandManager brandManager = new BrandManager(new EfBrandDal());
+            CarManager carManager = new CarManager(new EfCarDal());
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+            foreach (var rental in rentalManager.GetAll().Data)
+            {
+                Console.WriteLine(rental.CarId);
+            }
 
-            CarDetailList();
+            rentalManager.Add(new Rental
+            {
+                CarId = 2,
+                CustomerId = 1,
+                RentDate = DateTime.Now,
+                ReturnDate = null
+            });
 
-            RentalList();
+
+
 
         }
 
-        private static void CarDetailList()
+        private static void CarDetails(CarManager carManager)
         {
-            CarManager carManager = new CarManager(new EfCarDal());
-            var result = carManager.GetCarDetails();
+
+
+            var result = carManager.GetAllCarDetails();
             if (result.Success)
             {
                 foreach (var car in result.Data)
                 {
-                    Console.WriteLine("Marka: " + car.BrandName + "\n" + "Model: " + car.ModelYear + "\n" + "Renk: " + car.ColorName + "\n" + "Günlük Fiyat: " + car.DailyPrice);
+                    Console.WriteLine("Marka: " + car.BrandName + "\n" + "Model: " + car.CarName + "\n" + "Renk: " + car.ColorName + "\n" + "Günlük Fiyat: " + car.DailyPrice);
                 }
                 Console.WriteLine(result.Message);
-
             }
             else
             {
@@ -39,53 +49,5 @@ namespace CarApp
             }
         }
 
-        private static void RentalList()
-        {
-            RentalManager rentalManager = new RentalManager(new EfRentalDal());
-            var result = rentalManager.GetAll();
-
-            if (result.Success)
-            {
-                foreach (var rental in result.Data)
-                {
-                    Console.WriteLine(rental.CarId);
-                }
-            }
-
-        }
-
-        private static void BrandList()
-        {
-            BrandManager brandManager = new BrandManager(new EfBrandDal());
-            var result = brandManager.GetAll();
-            if (result.Success)
-            {
-                foreach (var brand in result.Data)
-                {
-                    Console.WriteLine(brand.BrandName);
-                }
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
-
-        }
-        private static void ColorList()
-        {
-            ColorManager colorManager = new ColorManager(new EfColorDal());
-            var result = colorManager.GetAll();
-            if (result.Success)
-            {
-                foreach (var brand in result.Data)
-                {
-                    Console.WriteLine(brand.ColorName);
-                }
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
-        }
     }
 }

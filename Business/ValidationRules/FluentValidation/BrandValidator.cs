@@ -10,7 +10,7 @@ namespace Business.ValidationRules.FluentValidation
     {
         public BrandValidator()
         {
-            RuleFor(b => b.BrandName).MinimumLength(2);
+            RuleFor(b => b.BrandName).MinimumLength(2).WithMessage("Marka ismi minimum iki karakter olmalı");
         }
     }
 }

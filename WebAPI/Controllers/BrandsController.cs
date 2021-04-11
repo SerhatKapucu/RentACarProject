@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("getbrand")]
+        [HttpGet("getbrandbyid")]
         public IActionResult Get(int id)
         {
             var result = _brandService.Get(id);

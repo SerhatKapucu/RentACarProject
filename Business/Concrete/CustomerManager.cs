@@ -2,6 +2,7 @@
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -37,6 +38,16 @@ namespace Business.Concrete
         public IDataResult<List<Customer>> GetAll()
         {
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
+        }
+
+        public IDataResult<CustomerDto> GetByEmail(string email)
+        {
+            return new SuccessDataResult<CustomerDto>(_customerDal.GetByEmail(c => c.Email == email));
+        }
+
+        public IDataResult<List<CustomerDto>> GetCustomerDetails()
+        {
+            return new SuccessDataResult<List<CustomerDto>>(_customerDal.GetCustomerDetails());
         }
 
         public IResult Update(Customer customer)
